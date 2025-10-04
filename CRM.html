@@ -100,66 +100,161 @@
   body[data-theme="light"] .dlg-head{background:linear-gradient(180deg,#f7f9fe,#eef2f8)}
   .dlg-body{padding:14px;display:grid;gap:12px}
 
+  .surface{
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:linear-gradient(180deg,rgba(27,40,61,.7),rgba(15,20,30,.72));
+    box-shadow:0 20px 42px rgba(0,0,0,.35);
+  }
+  body[data-theme="light"] .surface{
+    background:linear-gradient(180deg,#fff,#eef3fb);
+    box-shadow:0 18px 34px rgba(27,92,255,.08);
+  }
+
   /* Шапка редактора: единый современный стиль полей */
   .gridHead{
-    display:grid; gap:12px 16px;
-    grid-template-columns: 1.3fr .9fr .9fr;
-    grid-template-areas:
-      "title service start"
-      "customer progressA end"
-      "orderNo prio .";
-    align-items:end;
+    display:grid;
+    gap:12px 14px;
+    grid-template-columns:minmax(340px,4.8fr) minmax(220px,2.4fr) minmax(150px,1.3fr) minmax(150px,1.3fr);
+    grid-auto-rows:auto;
+    padding:16px 18px 18px;
+  }
+  .gridHead > div{
+    display:flex; flex-direction:column; gap:4px;
+    position:relative;
   }
   .gridHead > div label{
-    display:block; font-size:12px; color:var(--muted); margin:0 0 4px 2px; user-select:none;
+    display:block; font-size:11px; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--muted);
+    margin-left:2px; user-select:none;
   }
-  /* Все поля шапки — одинаковые размеры/радиусы */
-  .gridHead input[type="text"],
-  .gridHead input[type="number"],
-  .gridHead input[type="date"],
-  .gridHead select{
-    height:36px; padding:6px 12px; border-radius:12px;
-    border:1px solid var(--border); background:var(--inputBg);
+  .gridHead input{border-radius:16px;}
+  /* Все поля формы заказа — единый стиль */
+  #orderForm input[type="text"],
+  #orderForm input[type="number"],
+  #orderForm input[type="date"],
+  #orderForm select,
+  #orderForm textarea{
+    min-height:36px; padding:8px 12px;
+    border-radius:14px; border:1px solid rgba(116,136,170,.45);
+    background:linear-gradient(180deg,var(--inputBg),rgba(12,16,24,.96));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+    font-size:14px;
+    transition:border-color .15s, box-shadow .15s, background-color .15s;
   }
-  /* Состояние disabled — та же высота и стиль, но другой фон/цвет */
-  .gridHead input:disabled{ background:var(--inputDisabled); color:var(--muted) }
+  body[data-theme="light"] #orderForm input,
+  body[data-theme="light"] #orderForm select,
+  body[data-theme="light"] #orderForm textarea{
+    background:linear-gradient(180deg,#fff,#f4f6fb);
+    border-color:rgba(161,175,206,.6);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+  }
+  #orderForm textarea{min-height:60px; resize:vertical;}
+  #orderForm select{
+    appearance:none; padding-right:44px;
+    background:linear-gradient(180deg,var(--inputBg),rgba(12,16,24,.96));
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M4.5 6.75 9 11.25l4.5-4.5" fill="none" stroke="%239ba7bc" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+    background-repeat:no-repeat;
+    background-position:right 16px center;
+    background-size:14px 14px;
+  }
+  body[data-theme="light"] #orderForm select{
+    background:linear-gradient(180deg,#fff,#f4f6fb);
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M4.5 6.75 9 11.25l4.5-4.5" fill="none" stroke="%23586a8a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  }
+  #orderForm input[type="date"]{font-variant-numeric:tabular-nums;}
+  #orderForm :is(input,select,textarea):disabled{
+    background:var(--inputDisabled);
+    color:var(--muted);
+    border-color:rgba(104,122,152,.45);
+    box-shadow:none;
+  }
   /* Выравнивание по сетке */
-  .gridHead .title{ grid-area:title }
-  .gridHead .service{ grid-area:service }
-  .gridHead .start{ grid-area:start }
-  .gridHead .customer{ grid-area:customer }
-  .gridHead .progressField{ grid-area:progressA }
-  .gridHead .end{ grid-area:end }
-  .gridHead .orderNo{ grid-area:orderNo }
-  .gridHead .prio{ grid-area:prio }
-
-  /* Немного более «пилюльные» поля для трёх основных */
-  #orderForm input[name="title"],
-  #orderForm input[name="customer"],
-  #orderForm input[name="orderNo"]{
-    border-radius:18px;
+  .gridHead .title{
+    grid-column:1;
+    grid-row:1;
+    align-self:stretch;
   }
+  .gridHead .service{grid-column:3;grid-row:1;}
+  .gridHead .start{grid-column:4;grid-row:1;}
+  .gridHead .customer{grid-column:1;grid-row:2;}
+  .gridHead .orderNo{grid-column:2;grid-row:2;}
+  .gridHead .progressField{grid-column:3;grid-row:2;}
+  .gridHead .end{grid-column:4;grid-row:2;}
+
+  #orderForm input[name="title"]{width:100%;}
+
+  @media (max-width: 920px){
+    .gridHead{
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    }
+    .gridHead > div{grid-column:auto!important;grid-row:auto!important;}
+    .gridHead .title{width:100%;}
+  }
+
+  /* Унифицированные панели внутри формы заказа */
+  .section-card{padding:20px 22px;}
+  details.section-card{padding:0;overflow:hidden;}
+  details.section-card > summary{
+    padding:18px 22px;
+    cursor:pointer;
+    font-weight:600;
+    letter-spacing:.02em;
+    display:flex;align-items:center;gap:10px;
+    list-style:none;
+  }
+  details.section-card > summary::-webkit-details-marker{display:none;}
+  details.section-card > summary::before{
+    content:"";
+    width:10px;height:10px;flex:0 0 10px;
+    border:2px solid var(--muted);
+    border-left-width:0;border-bottom-width:0;
+    transform:rotate(45deg);
+    transition:transform .2s ease;
+    margin-right:6px;
+  }
+  details.section-card[open] > summary::before{transform:rotate(135deg);}
+  details.section-card[open] > summary{border-bottom:1px solid var(--border);}
+  details.section-card .section-body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:18px;}
+
+  .section-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;}
+  .section-toolbar .left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .section-toolbar .left label{gap:8px;}
+  .section-toolbar .right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-left:auto;}
+  .section-toolbar .note{font-size:11px;color:var(--muted);}
+
+  .form-footer{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding:16px 18px;}
+  .form-footer .status-field{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:220px;}
+  .form-footer .status-field label{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-left:2px;}
+  .form-footer .status-field select{width:100%;}
+  .form-footer .actions{display:flex;align-items:center;gap:10px;margin-left:auto;}
+
+  #orderForm textarea{width:100%;}
+  #stagesTable input,#stagesTable select{padding:4px 6px;min-height:0;border-radius:10px;box-shadow:none;background:var(--inputBg);}
+  #stagesTable select{background-image:none;padding-right:8px;}
+  body[data-theme="light"] #stagesTable input,
+  body[data-theme="light"] #stagesTable select{background:#fff;box-shadow:none;border-color:#d0d9ec;}
 
   /* Таблица переделов */
   table{width:100%;border-collapse:collapse;table-layout:fixed}
-  th,td{border:1px solid var(--border);padding:6px 8px;vertical-align:middle}
+  th,td{border:1px solid var(--border);padding:3px 8px;vertical-align:middle}
   body[data-theme="light"] th,body[data-theme="light"] td{border-color:#e5eaf5}
   th{color:var(--muted);font-weight:600}
   #stagesTable th:first-child,#stagesTable td:first-child{text-align:left}
   #stagesTable th:not(:first-child),#stagesTable td:not(:first-child){text-align:center}
   #stagesTable td input,#stagesTable td select{width:100%}
-  #stagesTable thead th:nth-child(1){width:33%}
+  #stagesTable thead th:nth-child(1){width:24%}
   #stagesTable thead th:nth-child(2){width:7%}
-  #stagesTable thead th:nth-child(3){width:10%}
-  #stagesTable thead th:nth-child(4){width:17%}
-  #stagesTable thead th:nth-child(5){width:17%}
-  #stagesTable thead th:nth-child(6){width:11%}
-  #stagesTable thead th:nth-child(7){width:5%}
-  #stagesTable input[data-k="progress"]{max-width:76px;text-align:center;margin:auto}
-  #stagesTable input[data-k="start"],#stagesTable input[data-k="end"]{max-width:148px;text-align:center;margin:auto}
-  #stagesTable input[data-k="value"]{max-width:116px;text-align:center;margin:auto}
-  #stagesTable input.stg-name{padding:6px 8px}
-  #stagesTable td.chk{padding:6px 8px}
+  #stagesTable thead th:nth-child(3){width:11%}
+  #stagesTable thead th:nth-child(4){width:18%}
+  #stagesTable thead th:nth-child(5){width:18%}
+  #stagesTable thead th:nth-child(6){width:16%}
+  #stagesTable thead th:nth-child(7){width:6%}
+  #stagesTable input[data-k="progress"]{max-width:72px;text-align:center;margin:auto}
+  #stagesTable input[data-k="start"],#stagesTable input[data-k="end"]{max-width:128px;text-align:center;margin:auto}
+  #stagesTable input[data-k="value"]{max-width:240px;width:100%;text-align:center;margin:auto}
+  #stagesTable input.stg-name{padding:4px 6px}
+  #stagesTable td.chk{padding:3px 8px}
 
   #orderForm details{grid-column:1 / -1}
   #orderForm details textarea{width:100%;resize:vertical}
@@ -225,49 +320,51 @@
     </div>
   </div>
   <form id="orderForm" class="dlg-body" method="dialog">
-    <div class="gridHead">
-      <div class="title"><label>Название заказа</label><input name="title" required placeholder="Напр.: Корпус Шкафа" /></div>
+    <div class="gridHead surface">
+      <div class="title"><label>Название заказа</label><input name="title" required placeholder="ВЗПС-021612 АБХМ (Фортес Групп)" /></div>
       <div class="service"><label>Сумма услуг, ₽</label><input name="serviceTotal" type="text" inputmode="decimal" placeholder="0" /></div>
       <div class="start"><label>Начало (авто)</label><input name="start" type="date" disabled /></div>
 
-      <div class="customer"><label>Клиент</label><input name="customer" placeholder="ООО Ромашка" /></div>
+      <div class="customer"><label>Клиент</label><input name="customer" placeholder="АБХМ" /></div>
+      <div class="orderNo"><label>№ заказа</label><input name="orderNo" required placeholder="ВЗПС-021612" /></div>
       <div class="progressField"><label>Общий прогресс, %</label><input name="progress" type="number" min="0" max="100" value="0" disabled /></div>
       <div class="end"><label>Конец (авто)</label><input name="end" type="date" disabled /></div>
-
-      <div class="orderNo"><label>№ заказа</label><input name="orderNo" required placeholder="Напр.: 24-091" /></div>
-      <div class="prio"><label>Приоритет</label><select name="prio"><option value="normal">Обычный</option><option value="high">Высокий</option><option value="urgent">Срочный</option></select></div>
     </div>
 
-    <details open>
+    <details class="section-card surface" open>
       <summary>План переделов (статус, % выполнения, сроки, Руб/часов)</summary>
-      <div class="list">
-        <table id="stagesTable">
-          <thead><tr><th>Передел</th><th>Готово</th><th>% вып.</th><th>Начало</th><th>Конец</th><th>Руб/часов</th><th></th></tr></thead>
-        <tbody></tbody></table>
+      <div class="section-body">
+        <div class="list">
+          <table id="stagesTable">
+            <thead><tr><th>Передел</th><th>Готово</th><th>% вып.</th><th>Начало</th><th>Конец</th><th>Руб/часов</th><th></th></tr></thead>
+          <tbody></tbody></table>
 
-        <div class="rowc" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
-          <div class="rowc" style="gap:14px">
-            <label class="rowc"><input id="dateToday" type="checkbox" class="ready-switch" /> Даты=сегодня</label>
-            <span class="muted" style="font-size:11px">Галочка «Готово» = 100% по переделу.</span>
-          </div>
-          <div class="rowc" style="margin-left:auto; gap:8px">
-            <button type="button" id="addStageBtn">+ Передел</button>
-            <button type="button" id="presetStagesBtn">🔁 Базовые</button>
+          <div class="section-toolbar">
+            <div class="left">
+              <label class="rowc"><input id="dateToday" type="checkbox" class="ready-switch" /> Даты=сегодня</label>
+              <span class="note">Галочка «Готово» = 100% по переделу.</span>
+            </div>
+            <div class="right">
+              <button type="button" id="addStageBtn">+ Передел</button>
+              <button type="button" id="presetStagesBtn">🔁 Базовые</button>
+            </div>
           </div>
         </div>
       </div>
     </details>
-
-    <div id="partsBox"></div>
-
-    <details open>
+    <details class="section-card surface" open>
       <summary>Описание/исключения</summary>
-      <textarea name="notes" rows="4" placeholder="Краткое ТЗ, исключения, кооперация…"></textarea>
+      <div class="section-body">
+        <textarea name="notes" rows="2" placeholder="Краткое ТЗ, исключения, кооперация…"></textarea>
+      </div>
     </details>
 
-    <div class="rowc" style="justify-content:space-between;margin-top:6px;gap:12px;align-items:center;flex-wrap:wrap">
-      <div class="rowc"><span class="muted">Состояние</span><select name="status" id="statusSel"></select></div>
-      <div class="rowc" style="margin-left:auto;gap:8px">
+    <div class="section-card surface form-footer">
+      <div class="status-field">
+        <label for="statusSel">Состояние</label>
+        <select name="status" id="statusSel"></select>
+      </div>
+      <div class="actions">
         <button type="button" class="danger" id="deleteOrderBtn" style="display:none">Удалить</button>
         <button type="submit" class="primary">Сохранить</button>
       </div>
@@ -438,10 +535,9 @@ function closeOrder(){orderDlg.close()}
 function fillOrderForm(o,b){
   orderForm.title.value=o.title||''; orderForm.orderNo.value=o.orderNo||''; orderForm.customer.value=o.customer||'';
   orderForm.serviceTotal.value=(o.serviceTotal??'')===''?'':Number(o.serviceTotal).toLocaleString('ru-RU');
-  orderForm.prio.value=o.prio||'normal'; orderForm.notes.value=o.notes||''; orderForm.status.value=o.status||b.lanes[0]; orderForm.id.value=o.id;
+  orderForm.notes.value=o.notes||''; orderForm.status.value=o.status||b.lanes[0]; orderForm.id.value=o.id;
   (o.stages?.length?o.stages:DEFAULT_STAGES.map(n=>({name:n,done:false,progress:0,start:'',end:'',value:''}))).forEach(st=>appendStageRow(st));
   computeOrderDatesFromStages(o); orderForm.start.value=o.start||''; orderForm.end.value=o.end||''; orderForm.progress.value=calcAutoProgress(o.stages);
-  renderPartsBox(o);
 }
 
 /* формат суммы */
@@ -493,7 +589,7 @@ orderForm.addEventListener('submit',e=>{
   const sd=stages.map(x=>x.start).filter(Boolean).sort(); const ed=stages.map(x=>x.end).filter(Boolean).sort();
   const startAuto=sd[0]||''; const endAuto=ed[ed.length-1]||'';
   const obj={id,title:orderForm.title.value.trim(),orderNo:orderForm.orderNo.value.trim(),customer:orderForm.customer.value.trim(),
-    start:startAuto,end:endAuto,done:orderDone.checked,progress:calcAutoProgress(stages),progressManual:false,prio:orderForm.prio.value,
+    start:startAuto,end:endAuto,done:orderDone.checked,progress:calcAutoProgress(stages),progressManual:false,
     notes:orderForm.notes.value.trim(),status:orderForm.status.value,
     serviceTotal:(()=>{const v=(window._parseMoney?.(orderForm.serviceTotal.value));return v===''?'':v})(),stages,
     createdAt:exist?.createdAt||new Date().toISOString(),partOfPct:exist?.partOfPct??null,restOfPct:exist?.restOfPct??null,
@@ -507,31 +603,6 @@ function openBoard(){const b=currentBoard();boardForm.name.value=b.name;boardFor
 function closeBoard(){boardDlg.close()}
 boardForm.addEventListener('submit',e=>{e.preventDefault();const id=boardForm.id.value;const b=state.boards.find(x=>x.id===id);b.name=boardForm.name.value.trim()||'Доска';b.lanes=boardForm.lanes.value.split(',').map(s=>s.trim()).filter(Boolean);save();renderAll();boardDlg.close()});
 deleteBoardBtn.onclick=()=>{const id=boardForm.id.value;if(state.boards.length<=1){alert('Нельзя удалить единственную доску');return}if(!confirm('Удалить эту доску и все её заказы?'))return;state.boards=state.boards.filter(b=>b.id!==id);if(!state.boards.find(b=>b.id===state.currentBoardId)){state.currentBoardId=state.boards[0].id}save();renderAll();boardDlg.close()};
-
-/* Части (поглощение/возврат) */
-function renderPartsBox(o){
-  const box=document.getElementById('partsBox'); box.innerHTML=''; const b=currentBoard();
-  const isChild=!!o.parentId; const children=b.orders.filter(x=>x.parentId===o.id); if(!isChild&&!children.length)return;
-  const wrap=document.createElement('details'); wrap.open=true; const title=isChild?'Это часть заказа':'Части этого заказа'; wrap.innerHTML=`<summary>${title}</summary>`; const list=document.createElement('div'); list.className='list';
-  if(isChild){const parent=b.orders.find(x=>x.id===o.parentId);if(parent){const row=document.createElement('div');row.className='rowc';const openBtn=document.createElement('button');openBtn.textContent='Открыть основной';openBtn.onclick=()=>{orderDlg.close();openOrder(parent.id)};const backBtn=document.createElement('button');backBtn.textContent='↩️ Вернуть в основной';backBtn.onclick=()=>mergeChildIntoParent(o.id);row.append(openBtn,backBtn);list.append(row)}}
-  if(children.length){const tools=document.createElement('div');tools.className='rowc';const allBtn=document.createElement('button');allBtn.textContent='↩️ Поглотить все части';allBtn.onclick=()=>mergeAllChildren(o.id);tools.appendChild(allBtn);list.appendChild(tools);
-    children.forEach(ch=>{const row=document.createElement('div');row.className='rowc';const name=document.createElement('span');name.textContent=`${ch.title} · №${ch.orderNo}`;const openBtn=document.createElement('button');openBtn.textContent='Открыть';openBtn.onclick=()=>{orderDlg.close();openOrder(ch.id)};const backBtn=document.createElement('button');backBtn.textContent='↩️ Вернуть';backBtn.onclick=()=>mergeChildIntoParent(ch.id);row.append(name,openBtn,backBtn);list.appendChild(row)})}
-  wrap.appendChild(list); box.appendChild(wrap);
-}
-function mergeAllChildren(parentId){
-  const b=currentBoard(); const parent=b.orders.find(x=>x.id===parentId); if(!parent)return alert('Основной заказ не найден');
-  const kids=b.orders.filter(x=>x.parentId===parentId); if(!kids.length)return; if(!confirm('Вернуть все части в основной заказ?'))return;
-  kids.forEach(k=>mergeChildIntoParent(k.id,true)); if(!(parent.childIds||[]).length){parent.restOfPct=null}
-  computeOrderDatesFromStages(parent); parent.progress=calcAutoProgress(parent.stages); save(); renderCards(); orderDlg.close(); openOrder(parent.id);
-}
-function mergeChildIntoParent(childId,silent=false){
-  const b=currentBoard(); const child=b.orders.find(x=>x.id===childId); if(!child||!child.parentId){alert('Не удалось найти часть или её основной заказ');return}
-  if(!silent&&!confirm('Вернуть эту часть в основной заказ?'))return; const parent=b.orders.find(x=>x.id===child.parentId); if(!parent){alert('Основной заказ не найден');return}
-  const pStagesByName=Object.fromEntries((parent.stages||[]).map(s=>[s.name,s]));
-  (child.stages||[]).forEach(cs=>{const ps=pStagesByName[cs.name];if(!ps){(parent.stages=parent.stages||[]).push(structuredClone(cs));return}const pv=Number(ps.value);const cv=Number(cs.value);if(Number.isFinite(pv)&&Number.isFinite(cv)){ps.value=Math.round((pv+cv+Number.EPSILON)*100)/100}});
-  parent.childIds=(parent.childIds||[]).filter(id=>id!==child.id); if(!parent.childIds.length){parent.restOfPct=null}
-  computeOrderDatesFromStages(parent); parent.progress=calcAutoProgress(parent.stages); b.orders=b.orders.filter(x=>x.id!==child.id); save(); renderCards(); if(!silent){orderDlg.close();openOrder(parent.id)}
-}
 
 /* Разбивка на подзаказ */
 const splitDlg=document.createElement('dialog'); splitDlg.id='splitDlg'; splitDlg.innerHTML=`
@@ -606,7 +677,7 @@ function loadDemo(){
     const st=DEFAULT_STAGES.map(n=>{const stS=new Date(s);stS.setDate(stS.getDate()+Math.floor(Math.random()*Math.max(1,len-1)));const stE=new Date(stS);stE.setDate(stE.getDate()+Math.floor(Math.random()*3));const done=Math.random()<0.4;const prog=done?100:Math.floor(Math.random()*80);const val=n.toLowerCase()==='закупка'?'':(Math.random()<0.5?(5+Math.floor(Math.random()*15)):'');return {name:n,done,progress:prog,start:fmtDate(stS),end:fmtDate(stE),value:val}});
     const order={id,title:names[i],orderNo:`24-${100+i}`,customer:['ООО Ромашка','ЗАО Лист','ИП Металл'][i%3],
       start:fmtDate(s),end:fmtDate(e),done:Math.random()<0.15,progress:Math.floor(Math.random()*100),progressManual:true,
-      prio:['normal','high','urgent'][Math.floor(Math.random()*3)],notes:'',status:lanes[Math.floor(Math.random()*lanes.length)],
+      notes:'',status:lanes[Math.floor(Math.random()*lanes.length)],
       serviceTotal:Math.random()<0.6?(10000+Math.floor(Math.random()*90000)):'',stages:st,createdAt:new Date().toISOString()};
     b.orders.push(order);
   }
