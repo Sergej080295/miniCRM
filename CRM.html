@@ -114,7 +114,7 @@
   /* Шапка редактора: единый современный стиль полей */
   .gridHead{
     display:grid; gap:12px 16px;
-    grid-template-columns:minmax(320px,3.6fr) minmax(260px,3fr) minmax(160px,1.2fr) minmax(160px,1.2fr);
+    grid-template-columns:minmax(420px,5fr) minmax(240px,2.6fr) minmax(160px,1.2fr) minmax(160px,1.2fr);
     grid-auto-rows:auto;
     padding:16px 18px 18px;
   }
@@ -170,10 +170,9 @@
   }
   /* Выравнивание по сетке */
   .gridHead .title{
-    grid-column:1 / span 2;
+    grid-column:1;
     grid-row:1;
-    justify-self:start;
-    width:calc(100% - 16px);
+    align-self:stretch;
   }
   .gridHead .service{grid-column:3;grid-row:1;}
   .gridHead .start{grid-column:4;grid-row:1;}
@@ -181,6 +180,8 @@
   .gridHead .orderNo{grid-column:2;grid-row:2;}
   .gridHead .progressField{grid-column:3;grid-row:2;}
   .gridHead .end{grid-column:4;grid-row:2;}
+
+  #orderForm input[name="title"]{width:100%;}
 
   @media (max-width: 920px){
     .gridHead{
@@ -241,7 +242,7 @@
   #stagesTable th:first-child,#stagesTable td:first-child{text-align:left}
   #stagesTable th:not(:first-child),#stagesTable td:not(:first-child){text-align:center}
   #stagesTable td input,#stagesTable td select{width:100%}
-  #stagesTable thead th:nth-child(1){width:29%}
+  #stagesTable thead th:nth-child(1){width:26%}
   #stagesTable thead th:nth-child(2){width:7%}
   #stagesTable thead th:nth-child(3){width:12%}
   #stagesTable thead th:nth-child(4){width:18%}
